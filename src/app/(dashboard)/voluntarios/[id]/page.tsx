@@ -182,6 +182,10 @@ export default async function VolunteerAdminDetailPage({ params }: PageProps) {
                     </p>
                     <p className="mt-2 text-xs text-text-muted">
                       Obtenida el {formatDate(ub.earnedAt)}
+                      {" · "}
+                      {ub.assignedBy
+                        ? `Asignada por ${ub.assignedBy.nombre} ${ub.assignedBy.apellido}`
+                        : "Asignación automática"}
                     </p>
                   </div>
                 </CardContent>

@@ -106,7 +106,7 @@ export class BadgeService {
   }
 
   /** Asignación manual (admin); ignora criterios automáticos. */
-  static async assignToUser(userId: string, badgeId: string) {
+  static async assignToUser(userId: string, badgeId: string, assignedById?: string) {
     const user = await prisma.user.findFirst({
       where: { id: userId, role: "voluntario", deletedAt: null },
       select: { id: true },
@@ -120,7 +120,7 @@ export class BadgeService {
       where: {
         userId_badgeId: { userId, badgeId },
       },
-      create: { userId, badgeId },
+      create: { userId, badgeId, assignedById },
       update: {},
     });
   }

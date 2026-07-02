@@ -34,6 +34,24 @@ export class HourLogService {
     });
   }
 
+  static async findProcessed(take = 50) {
+    return prisma.hourLog.findMany({
+      where: {
+        ...notDeleted,
+        volunteer: notDeleted,
+        activity: notDeleted,
+        estado: { in: ["validado", "rechazado"] },
+      },
+      include: {
+        volunteer: { select: { id: true, nombre: true, apellido: true } },
+        activity: { select: { id: true, nombre: true } },
+        validatedBy: { select: { id: true, nombre: true, apellido: true } },
+      },
+      orderBy: { createdAt: "desc" },
+      take,
+    });
+  }
+
   static async findById(id: string) {
     return prisma.hourLog.findFirst({
       where: {

@@ -28,6 +28,9 @@ export default async function BadgesAdminPage() {
           select: { nombre: true, apellido: true, email: true },
         },
         badge: { select: { nombre: true, icono: true } },
+        assignedBy: {
+          select: { nombre: true, apellido: true },
+        },
       },
       orderBy: { earnedAt: "desc" },
       take: 50,

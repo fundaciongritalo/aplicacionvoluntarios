@@ -60,8 +60,18 @@ export const changePasswordSchema = z
     path: ["newPassword"],
   });
 
+export const updateProfileSchema = z.object({
+  nombre: z.string().min(1, "El nombre es requerido"),
+  apellido: z.string().min(1, "El apellido es requerido"),
+  telefono: z.string().optional(),
+  cedula: z.string().optional(),
+  sede: z.string().optional(),
+  avatarUrl: z.string().max(2048).optional(),
+});
+
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type RecoveryFormData = z.infer<typeof recoverySchema>;
 export type ResetPasswordFormData = z.infer<typeof resetPasswordFormSchema>;
 export type ResetPasswordClientData = z.infer<typeof resetPasswordClientSchema>;
 export type ChangePasswordFormData = z.infer<typeof changePasswordSchema>;
+export type UpdateProfileFormData = z.infer<typeof updateProfileSchema>;

@@ -24,8 +24,9 @@ export default async function PortalLayout({
     },
   });
   if (!me || me.deletedAt) redirect("/login");
-  if (me.role === "admin") redirect("/panel");
-  if (me.role !== "voluntario") redirect("/login");
+  if (me.role !== "admin" && me.role !== "voluntario") redirect("/login");
+
+  const isAdmin = me.role === "admin";
 
   const profile = {
     nombre: me.nombre ?? "",
@@ -37,7 +38,7 @@ export default async function PortalLayout({
   return (
     <div className="min-h-screen bg-surface-secondary">
       <IdleLogout />
-      <VolunteerSidebar profile={profile} />
+      <VolunteerSidebar profile={profile} isAdmin={isAdmin} />
       <main id="main-content" className="lg:ml-64 min-h-screen min-w-0 overflow-x-hidden">
         <div className="p-4 sm:p-6 lg:p-8 pt-16 lg:pt-8">{children}</div>
       </main>

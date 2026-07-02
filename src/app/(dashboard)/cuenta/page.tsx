@@ -5,19 +5,7 @@ import { VolunteerService } from "@/lib/services/volunteer.service";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { UserAvatar } from "@/components/user-avatar";
 import { EditProfileForm } from "@/components/edit-profile-form";
-import { ChangePasswordForm } from "./change-password-form";
-
-const ESTADO_LABELS: Record<string, string> = {
-  activo: "Activo",
-  inactivo: "Inactivo",
-  pendiente: "Pendiente",
-};
-
-const ESTADO_COLORS: Record<string, string> = {
-  activo: "bg-success-surface text-accent-green",
-  inactivo: "bg-surface-hover text-text-secondary",
-  pendiente: "bg-error-surface text-accent-orange",
-};
+import { ChangePasswordForm } from "@/app/(voluntario)/portal/cuenta/change-password-form";
 
 function formatDate(iso: Date | string) {
   return new Date(iso).toLocaleDateString("es-CR", {
@@ -27,15 +15,12 @@ function formatDate(iso: Date | string) {
   });
 }
 
-export default async function PortalCuentaPage() {
+export default async function AdminCuentaPage() {
   const session = await auth();
   if (!session?.user?.id) redirect("/login");
 
   const me = await VolunteerService.findById(session.user.id);
   if (!me) redirect("/login");
-
-  const estadoLabel = ESTADO_LABELS[me.estado] ?? me.estado;
-  const estadoColor = ESTADO_COLORS[me.estado] ?? "bg-surface-hover text-text-secondary";
 
   return (
     <div className="max-w-2xl space-y-6 animate-fade-in">
@@ -64,10 +49,8 @@ export default async function PortalCuentaPage() {
               <h2 className="text-xl font-bold text-text-primary truncate">
                 {me.nombre} {me.apellido}
               </h2>
-              <span
-                className={`mt-1 inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${estadoColor}`}
-              >
-                {estadoLabel}
+              <span className="mt-1 inline-flex rounded-full bg-primary-50 text-primary-600 px-2.5 py-1 text-xs font-medium">
+                Administrador
               </span>
             </div>
           </div>
@@ -92,24 +75,6 @@ export default async function PortalCuentaPage() {
               </div>
             </div>
           </dl>
-
-          {me.habilidades.length > 0 && (
-            <div className="mt-6">
-              <p className="text-xs font-medium uppercase tracking-wide text-text-muted">
-                Habilidades
-              </p>
-              <div className="mt-2 flex flex-wrap gap-1.5">
-                {me.habilidades.map((h) => (
-                  <span
-                    key={h}
-                    className="inline-flex rounded-full bg-surface-secondary px-2.5 py-1 text-xs text-text-primary"
-                  >
-                    {h}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
         </CardContent>
       </Card>
 

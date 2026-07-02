@@ -272,6 +272,7 @@ export class ReportService {
           select: { nombre: true, apellido: true, email: true },
         },
         activity: { select: { nombre: true } },
+        validatedBy: { select: { nombre: true, apellido: true } },
       },
       orderBy: { fecha: "desc" },
       take: limit,
@@ -284,6 +285,9 @@ export class ReportService {
       actividad: r.activity.nombre,
       horas: Number(r.horas),
       estado: r.estado,
+      validadoPor: r.validatedBy
+        ? `${r.validatedBy.nombre} ${r.validatedBy.apellido}`.trim()
+        : "",
       notas: r.notas,
     }));
   }

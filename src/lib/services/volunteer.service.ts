@@ -75,6 +75,9 @@ export class VolunteerService {
           orderBy: { earnedAt: "desc" },
           include: {
             badge: true,
+            assignedBy: {
+              select: { nombre: true, apellido: true },
+            },
           },
         },
       },

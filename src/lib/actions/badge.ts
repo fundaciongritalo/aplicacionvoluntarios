@@ -26,7 +26,7 @@ export async function assignBadgeAction(input: Record<string, unknown>) {
   }
 
   try {
-    await BadgeService.assignToUser(parsed.data.userId, parsed.data.badgeId);
+    await BadgeService.assignToUser(parsed.data.userId, parsed.data.badgeId, session.user.id);
     revalidatePath("/badges");
     revalidatePath("/voluntarios");
     revalidatePath("/portal/insignias");

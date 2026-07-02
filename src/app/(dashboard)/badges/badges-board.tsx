@@ -30,6 +30,7 @@ export interface BadgesBoardAssignment {
   earnedAt: string;
   user: { nombre: string; apellido: string; email: string };
   badge: { nombre: string; icono: string };
+  assignedBy?: { nombre: string; apellido: string } | null;
 }
 
 interface BadgesBoardProps {
@@ -164,6 +165,9 @@ export function BadgesBoard({ volunteers, badges, assignments }: BadgesBoardProp
                       Insignia
                     </th>
                     <th className="p-3 font-semibold text-text-primary">Fecha</th>
+                    <th className="p-3 font-semibold text-text-primary">
+                      Asignado por
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -180,6 +184,11 @@ export function BadgesBoard({ volunteers, badges, assignments }: BadgesBoardProp
                       </td>
                       <td className="p-3 text-text-secondary">
                         {new Date(a.earnedAt).toLocaleDateString("es")}
+                      </td>
+                      <td className="p-3 text-text-secondary">
+                        {a.assignedBy
+                          ? `${a.assignedBy.nombre} ${a.assignedBy.apellido}`
+                          : "Sistema"}
                       </td>
                     </tr>
                   ))}

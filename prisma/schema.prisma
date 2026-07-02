@@ -40,7 +40,8 @@ model User {
   hourLogs    HourLog[]           @relation("Volunteer")
   validations HourLog[]           @relation("Validator")
   notifications Notification[]
-  userBadges  UserBadge[]
+  userBadges        UserBadge[]   @relation("BadgeOwner")
+  badgesAssigned    UserBadge[]   @relation("BadgeAssigner")
   pushSubscriptions PushSubscription[]
 
   @@index([role])
@@ -240,15 +241,18 @@ model Badge {
 }
 
 model UserBadge {
-  id       String   @id @default(cuid())
-  userId   String
-  badgeId  String
-  earnedAt DateTime @default(now())
+  id           String   @id @default(cuid())
+  userId       String
+  badgeId      String
+  assignedById String?
+  earnedAt     DateTime @default(now())
 
-  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  badge Badge @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  user       User  @relation("BadgeOwner", fields: [userId], references: [id], onDelete: Cascade)
+  badge      Badge @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  assignedBy User? @relation("BadgeAssigner", fields: [assignedById], references: [id])
 
   @@unique([userId, badgeId])
+  @@index([assignedById])
 }
 
 model PushSubscription {

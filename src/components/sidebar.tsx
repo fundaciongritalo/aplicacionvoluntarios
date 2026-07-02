@@ -10,6 +10,7 @@ import {
   Clock,
   Award,
   Settings,
+  UserCircle,
   LogOut,
   Menu,
   X,
@@ -19,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { logoutAction } from "@/lib/actions/auth";
 import { useState } from "react";
 import { UserAvatar } from "@/components/user-avatar";
+import { RoleSwitch } from "@/components/role-switch";
 
 interface SidebarProfile {
   nombre: string;
@@ -38,6 +40,7 @@ const navItems = [
   { href: "/horas", label: "Validar horas", icon: Clock },
   { href: "/badges", label: "Insignias", icon: Award },
   { href: "/reportes", label: "Reportes", icon: BarChart3 },
+  { href: "/cuenta", label: "Mi cuenta", icon: UserCircle },
   { href: "/configuracion", label: "Configuración", icon: Settings },
 ];
 
@@ -70,6 +73,8 @@ export function Sidebar({ profile }: SidebarProps) {
           </p>
         </div>
       </div>
+
+      <RoleSwitch activePanel="admin" onNavigate={() => setMobileOpen(false)} />
 
       <nav className="flex-1 px-3 mt-2 space-y-1">
         {navItems.map((item) => {

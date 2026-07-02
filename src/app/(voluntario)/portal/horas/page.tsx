@@ -106,6 +106,11 @@ export default async function PortalHorasPage() {
                         >
                           {estadoLabel[log.estado] ?? log.estado}
                         </span>
+                        {log.validatedBy && (
+                          <span className="block text-xs text-text-muted mt-0.5">
+                            por {log.validatedBy.nombre} {log.validatedBy.apellido}
+                          </span>
+                        )}
                       </td>
                     </tr>
                   ))}

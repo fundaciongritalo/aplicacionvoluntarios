@@ -5,7 +5,9 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import {
   changePasswordSchema,
+  updateProfileSchema,
   type ChangePasswordFormData,
+  type UpdateProfileFormData,
 } from "@/lib/validations/auth";
 
 export async function changeOwnPasswordAction(data: ChangePasswordFormData) {
@@ -46,6 +48,37 @@ export async function changeOwnPasswordAction(data: ChangePasswordFormData) {
   await prisma.user.update({
     where: { id: user.id },
     data: { passwordHash: newHash },
+  });
+
+  return { success: true as const };
+}
+
+export async function updateOwnProfileAction(data: UpdateProfileFormData) {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return { success: false as const, error: "No autorizado" };
+  }
+
+  const parsed = updateProfileSchema.safeParse(data);
+  if (!parsed.success) {
+    return {
+      success: false as const,
+      error: parsed.error.issues.map((i) => i.message).join(", "),
+    };
+  }
+
+  const { nombre, apellido, telefono, cedula, sede, avatarUrl } = parsed.data;
+
+  await prisma.user.update({
+    where: { id: session.user.id },
+    data: {
+      nombre,
+      apellido,
+      telefono: telefono?.trim() || "",
+      cedula: cedula?.trim() || "",
+      sede: sede?.trim() || "",
+      avatarUrl: avatarUrl?.trim() || null,
+    },
   });
 
   return { success: true as const };

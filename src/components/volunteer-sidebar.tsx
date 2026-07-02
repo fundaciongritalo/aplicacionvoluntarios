@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils";
 import { logoutAction } from "@/lib/actions/auth";
 import { useState } from "react";
 import { UserAvatar } from "@/components/user-avatar";
+import { RoleSwitch } from "@/components/role-switch";
 
 interface VolunteerSidebarProfile {
   nombre: string;
@@ -28,6 +29,7 @@ interface VolunteerSidebarProfile {
 
 interface VolunteerSidebarProps {
   profile: VolunteerSidebarProfile;
+  isAdmin?: boolean;
 }
 
 const navItems = [
@@ -44,7 +46,7 @@ function linkActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function VolunteerSidebar({ profile }: VolunteerSidebarProps) {
+export function VolunteerSidebar({ profile, isAdmin }: VolunteerSidebarProps) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -69,6 +71,10 @@ export function VolunteerSidebar({ profile }: VolunteerSidebarProps) {
           </p>
         </div>
       </div>
+
+      {isAdmin && (
+        <RoleSwitch activePanel="voluntario" onNavigate={() => setMobileOpen(false)} />
+      )}
 
       <nav className="flex-1 px-3 mt-2 space-y-1">
         {navItems.map((item) => {
@@ -106,7 +112,9 @@ export function VolunteerSidebar({ profile }: VolunteerSidebarProps) {
             <p className="text-sm font-medium text-text-inverse truncate">
               {profile.nombre} {profile.apellido}
             </p>
-            <p className="text-xs text-primary-200">Voluntario</p>
+            <p className="text-xs text-primary-200">
+              {isAdmin ? "Administrador" : "Voluntario"}
+            </p>
           </div>
         </div>
         <button
